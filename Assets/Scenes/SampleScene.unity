@@ -379,6 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lanePrefab: {fileID: 7308420705365502436, guid: 06ac6b8757d32ca4dae5306cff81984f, type: 3}
+  obstaclePrefab: {fileID: 4479490674464545278, guid: beb5e933b9789fa42a3459fa56907ea2, type: 3}
 --- !u!65 &1664778909
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -450,7 +451,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664778907}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.62747, y: -1, z: 5.6873}
+  m_LocalPosition: {x: 0, y: -1, z: 5.6873}
   m_LocalScale: {x: 26.348072, y: 1, z: 53.616642}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -470,9 +471,10 @@ GameObject:
   - component: {fileID: 2109265662}
   - component: {fileID: 2109265661}
   - component: {fileID: 2109265660}
+  - component: {fileID: 2109265665}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -572,3 +574,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2109265665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109265659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f21bdc4b9e7e9b45b34fa43fcb32cf2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
