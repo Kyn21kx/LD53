@@ -28,11 +28,10 @@ public class TerrainSplit : MonoBehaviour {
 			instancePos.y += FLOOR_LEVEL;
 			Instantiate(lanePrefab, instancePos, Quaternion.identity);
 		}
-		this.SpawnObstacles();
+		this.SpawnObstacles(this.obstaclePrefab);
 	}
 
-
-	private void SpawnObstacles() {
+	private void SpawnObstacles(GameObject obstacle) {
 		//Get the upper left position of the terrain
 		float leftCorner = transform.position.x - (SpaceBetweenLanes * (LANE_COUNT / 2f));
 		Vector3 upperLeft = new Vector3(leftCorner, transform.position.y, transform.position.z + (transform.localScale.z / 2f));
@@ -48,7 +47,7 @@ public class TerrainSplit : MonoBehaviour {
 			if (shouldSkip) continue;
 			//Otherwise, spawn the object
 			//Keep a reference, or destroy once they pass a certain threshold
-			this.SpawnObstacleAt(upperLeft, CenterSpace, SpaceBetweenLanes, i);
+			this.SpawnObstacleAt(obstacle, upperLeft, CenterSpace, SpaceBetweenLanes, i);
 		}
 	}
 
@@ -61,11 +60,11 @@ public class TerrainSplit : MonoBehaviour {
 		return Random.Range(0, 4);
 	}
 
-	private GameObject SpawnObstacleAt(Vector3 initialPos, float centerSpace, float spaceBetweenLanes, int index) {
+	private GameObject SpawnObstacleAt(GameObject obstacle, Vector3 initialPos, float centerSpace, float spaceBetweenLanes, int index) {
 		Vector3 center = initialPos;
 		center.x = initialPos.x + (centerSpace * index);
 		center.y += obstaclePrefab.transform.localScale.y;
-		GameObject instance = Instantiate(obstaclePrefab, center, Quaternion.identity);
+		GameObject instance = Instantiate(obstacle, center, Quaternion.identity);
 		Vector3 scale = instance.transform.localScale;
 		//Give it a little space to breathe
 		scale.x = spaceBetweenLanes - (lanePrefab.transform.localScale.x * 10f);

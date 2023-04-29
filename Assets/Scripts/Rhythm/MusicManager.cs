@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MusicManager : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+[RequireComponent(typeof(LibPdInstance))]
+public class MusicManager : MonoBehaviour {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    private LibPdInstance pdInstance;
+
+	private void Start() {
+		this.pdInstance = GetComponent<LibPdInstance>();
+		this.pdInstance.Bind("obstacles");
+	}
+
+	public void OnReceiveFloat(string name, float value) {
+		Debug.Log($"Event received from patch! Name: {name}, Value: {value}");
+	}
+
 }
