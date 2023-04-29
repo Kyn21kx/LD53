@@ -1,0 +1,11 @@
+#N canvas 953 0 958 1028 12;
+#X obj 35 171 metro;
+#X obj 35 310 s main-clock;
+#X obj 42 211 i;
+#X obj 69 211 + 1;
+#X obj 40 256 select 99;
+#X obj 176 142 arg_handler;
+#X connect 0 0 2 0;
+#X connect 2 0 3 0;
+#X connect 2 0 4 0;
+#X connect 3 0 2 1;
