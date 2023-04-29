@@ -379,6 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lanePrefab: {fileID: 7308420705365502436, guid: 06ac6b8757d32ca4dae5306cff81984f, type: 3}
+  obstaclePrefab: {fileID: 4479490674464545278, guid: beb5e933b9789fa42a3459fa56907ea2, type: 3}
 --- !u!65 &1664778909
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -450,7 +451,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1664778907}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.62747, y: -1, z: 5.6873}
+  m_LocalPosition: {x: 0, y: -1, z: 5.6873}
   m_LocalScale: {x: 26.348072, y: 1, z: 53.616642}
   m_ConstrainProportionsScale: 0
   m_Children: []
