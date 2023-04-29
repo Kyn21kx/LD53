@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ObstacleType {
+	Basic,
+	Interactable
+}
+
 public class TerrainSplit : MonoBehaviour {
 	
 	public const int LANE_COUNT = 4;
@@ -29,6 +34,19 @@ public class TerrainSplit : MonoBehaviour {
 			Instantiate(lanePrefab, instancePos, Quaternion.identity);
 		}
 		this.SpawnObstacles(this.obstaclePrefab);
+	}
+
+	public void SpawnObstacles(ObstacleType type) {
+		switch (type) {
+			case ObstacleType.Basic:
+				this.SpawnObstacles(this.obstaclePrefab);
+				break;
+			case ObstacleType.Interactable:
+				//Your code that will spawn interactable obstacles
+				break;
+			default:
+				throw new System.NotImplementedException($"Obstacle of type {type} has not been implemented");
+		}
 	}
 
 	private void SpawnObstacles(GameObject obstacle) {
