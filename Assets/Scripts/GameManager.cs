@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
-
+	
 	public float LevelTime { get => levelTime; private set => this.levelTime = value; }
 
 	[SerializeField]

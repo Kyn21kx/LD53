@@ -4,9 +4,11 @@ using UnityEngine;
 public static class EntityFetcher {
 
 	public static GameManager s_GameManager { get; private set; }
+	public static TerrainSplit s_TerrainSplit { get; private set; }
 	public static GameObject s_Player { get; private set; }
 	static EntityFetcher() {
 		s_GameManager = FetchWithTag<GameManager>("GameManager");
+		s_TerrainSplit = FetchWithTag<TerrainSplit>("Terrain");
 		s_Player = FetchWithTag("Player");
 	}
 

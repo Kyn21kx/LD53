@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 148890264}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -313,7 +313,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 75.88537
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -339,7 +339,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.039104205, y: -0, z: -0, w: 0.9992352}
-  m_LocalPosition: {x: 1.26, y: 3.12, z: -28.84}
+  m_LocalPosition: {x: 1.26, y: 3.12, z: -30.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -361,7 +361,7 @@ GameObject:
   - component: {fileID: 1664778908}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: Terrain
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -472,6 +472,7 @@ GameObject:
   - component: {fileID: 2109265661}
   - component: {fileID: 2109265660}
   - component: {fileID: 2109265665}
+  - component: {fileID: 2109265666}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -586,3 +587,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f21bdc4b9e7e9b45b34fa43fcb32cf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2109265666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2109265659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4907a069329c86d499b058a87851ada8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 30
+  dashCooldown: 0

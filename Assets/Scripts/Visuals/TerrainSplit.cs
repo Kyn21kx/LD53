@@ -4,9 +4,12 @@ using UnityEngine;
 
 public class TerrainSplit : MonoBehaviour {
 	
-	private const int LANE_COUNT = 4;
+	public const int LANE_COUNT = 4;
 	private const float FLOOR_LEVEL = 0.6f;
 
+	public float SpaceBetweenLanes => transform.localScale.x / LANE_COUNT;
+	public float CenterSpace => SpaceBetweenLanes / 2f;
+	
 	[SerializeField]
 	private GameObject lanePrefab;
 	[SerializeField]
@@ -31,9 +34,7 @@ public class TerrainSplit : MonoBehaviour {
 
 	private void SpawnObstacles() {
 		//Get the upper left position of the terrain
-		float spaceBetweenLanes = transform.localScale.x / LANE_COUNT;
-		float centerSpace = spaceBetweenLanes / 2f;
-		float leftCorner = transform.position.x - (spaceBetweenLanes * (LANE_COUNT / 2f));
+		float leftCorner = transform.position.x - (SpaceBetweenLanes * (LANE_COUNT / 2f));
 		Vector3 upperLeft = new Vector3(leftCorner, transform.position.y, transform.position.z + (transform.localScale.z / 2f));
 		//Spawn them in a for loop
 		int skippedPosition = this.GetSkippedPosition();
@@ -47,7 +48,7 @@ public class TerrainSplit : MonoBehaviour {
 			if (shouldSkip) continue;
 			//Otherwise, spawn the object
 			//Keep a reference, or destroy once they pass a certain threshold
-			this.SpawnObstacleAt(upperLeft, centerSpace, spaceBetweenLanes, i);
+			this.SpawnObstacleAt(upperLeft, CenterSpace, SpaceBetweenLanes, i);
 		}
 	}
 
