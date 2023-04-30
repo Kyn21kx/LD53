@@ -115,7 +115,7 @@ MonoBehaviour:
     defaultState: 1
   intensity:
     overrideState: 1
-    value: 0.408
+    value: 0.108
   fastMode:
     overrideState: 0
     value: 0
@@ -137,10 +137,10 @@ MonoBehaviour:
     value: 1
   intensity:
     overrideState: 1
-    value: 0.68
+    value: 2
   threshold:
     overrideState: 1
-    value: 1
+    value: 0.1
   softKnee:
     overrideState: 0
     value: 0.5
@@ -269,8 +269,8 @@ MonoBehaviour:
     value: {fileID: 0}
     defaultState: 1
   tonemapper:
-    overrideState: 0
-    value: 0
+    overrideState: 1
+    value: 2
   toneCurveToeStrength:
     overrideState: 0
     value: 0
@@ -319,7 +319,7 @@ MonoBehaviour:
     value: -0.3
   contrast:
     overrideState: 1
-    value: 59.9
+    value: 60
   mixerRedOutRedIn:
     overrideState: 0
     value: 100

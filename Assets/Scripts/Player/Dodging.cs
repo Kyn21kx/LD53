@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MovementState {
+    Dashing,
+    Walking
+}
+
 [RequireComponent(typeof(Rigidbody))]
 public class Dodging : MonoBehaviour  {
 
@@ -12,12 +17,22 @@ public class Dodging : MonoBehaviour  {
     //set it to something random for now
     [SerializeField] 
     private float moveSpeed = 4f;
+    [SerializeField] 
+    private float jumpForce = 4f;
+    [SerializeField] 
+    private float maxHeight = 1f;
+
+    private MovementState state;
 
     public int LaneIndex { get; private set; }
     public List<Vector3> LanePositions { get; private set; }
     private TerrainSplit terrainInfo;
 
     private float DashDuration => this.terrainInfo.CenterSpace / this.moveSpeed;
+    private float JumpDuration => this.maxHeight / this.jumpForce;
+
+    private bool Grounded => System.MathF.Round(this.rig.transform.position.y, 2) == 0f;
+
     private int dashDirection = 0;
     private Rigidbody rig;
 
@@ -25,6 +40,7 @@ public class Dodging : MonoBehaviour  {
 
 
     private void Start() {
+        this.state = MovementState.Walking;
         this.dashDirection = 0;
         this.dashTimer = new SpartanTimer(TimeMode.Framed);
         this.rig = GetComponent<Rigidbody>();
@@ -53,16 +69,22 @@ public class Dodging : MonoBehaviour  {
 
     private void Update() {
         this.HandleInput();
-        if (SentDashSignal() && !this.dashTimer.Started) {
+        if (this.AbleToDash()) {
+            this.state = MovementState.Dashing;
             this.dashTimer.Reset();
 		}
+
     }
 
 	private void FixedUpdate() {
-        if (this.dashTimer.Started) {
-            Dash(Time.fixedDeltaTime);
+		switch (state) {
+			case MovementState.Dashing:
+                Dash(Time.fixedDeltaTime);
+                break;
+			case MovementState.Walking:
+				return;
 		}
-	}
+    }
 
 	private void HandleInput () {
         if (this.dashTimer.Started) return;
@@ -85,10 +107,14 @@ public class Dodging : MonoBehaviour  {
         Vector3 targetPos = this.PlacePlayer(LaneIndex, timeStep * this.moveSpeed);
         if (currTime >= this.DashDuration || SpartanMath.ArrivedAt(this.rig.position, targetPos)) {
             this.dashTimer.Stop();
-            //cooldownTimer.Reset();
-            //We stopped the dash
+            this.state = MovementState.Walking;
             return;
         }
+    }
+
+    private bool AbleToDash() {
+        return SentDashSignal() && !this.dashTimer.Started && this.Grounded;
+
     }
 
     private bool SentDashSignal() {
@@ -96,6 +122,7 @@ public class Dodging : MonoBehaviour  {
     }
 
     private void UpdateLaneIndex(int index) {
+        if (!this.Grounded) return;
         this.LaneIndex = Mathf.Clamp(index, 0, this.LanePositions.Count - 1);
     }
 

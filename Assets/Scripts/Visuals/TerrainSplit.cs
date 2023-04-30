@@ -37,17 +37,16 @@ public class TerrainSplit : MonoBehaviour {
 			instancePos.y += FLOOR_LEVEL;
 			Instantiate(lanePrefab, instancePos, Quaternion.identity);
 		}
-		this.SpawnObstacles(this.obstaclePrefab);
 	}
 
 	private void Update() {
 		this.Scroll(Time.deltaTime);
 	}
 
-	public void SpawnObstacles(ObstacleType type) {
+	public void SpawnObstacles(ObstacleType type, int[] spawnFlags) {
 		switch (type) {
 			case ObstacleType.Basic:
-				this.SpawnObstacles(this.obstaclePrefab);
+				this.SpawnObstacles(this.obstaclePrefab, spawnFlags);
 				break;
 			case ObstacleType.Interactable:
 				//Your code that will spawn interactable obstacles
@@ -57,19 +56,15 @@ public class TerrainSplit : MonoBehaviour {
 		}
 	}
 
-	private void SpawnObstacles(GameObject obstacle) {
+	private void SpawnObstacles(GameObject obstacle, int[] spawnFlags) {
 		//Get the upper left position of the terrain
 		float leftCorner = transform.position.x - (SpaceBetweenLanes * (LANE_COUNT / 2f));
 		Vector3 upperLeft = new Vector3(leftCorner, transform.position.y, transform.position.z + (ScaleToWorld.z / 2f));
 		//Spawn them in a for loop
-		int skippedPosition = this.GetSkippedPosition();
 		const int STEP = 2;
 		for (int i = 1; i < LANE_COUNT * 2; i += STEP) {
-			//If skipped position == 4, spawn a cosmic ray
-			if (skippedPosition == 4) {
-				this.SpawnCosmicRay();
-			}
-			bool shouldSkip = (int)(i / STEP) == skippedPosition;
+			int nativeIndex = (int)(i / STEP);
+			bool shouldSkip = spawnFlags[nativeIndex] == 0;
 			if (shouldSkip) continue;
 			//Otherwise, spawn the object
 			//Keep a reference, or destroy once they pass a certain threshold
@@ -78,9 +73,9 @@ public class TerrainSplit : MonoBehaviour {
 	}
 
 	private int GetSkippedPosition() {
-		const int COSMIC_RAY_THRESHOLD = 9;
-		int cosmicRayProbability = Random.Range(0, 11);
-		if (cosmicRayProbability > COSMIC_RAY_THRESHOLD) {
+		const int COSMIC_RAY_THRESHOLD = 20;
+		int cosmicRayProbability = Random.Range(0, 101);
+		if (cosmicRayProbability == COSMIC_RAY_THRESHOLD) {
 			return 4;
 		}
 		return Random.Range(0, 4);
