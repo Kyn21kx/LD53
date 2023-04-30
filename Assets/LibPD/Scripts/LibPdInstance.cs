@@ -419,7 +419,7 @@ public class LibPdInstance : MonoBehaviour
 	[HideInInspector]
 	public string patchName;
 	///	Path to the folder the patch is in.
-	[HideInInspector]
+	
 	public string patchDir;
 
 	#if UNITY_EDITOR
