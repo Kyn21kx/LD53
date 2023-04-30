@@ -109,5 +109,11 @@ namespace Auxiliars {
 			return false;
 		}
 
+		public static bool ArrivedAt(float from, float to, float threshold = 0.2f) {
+			//Get the distance
+			float dis = Mathf.Abs(to - from);
+			return dis <= threshold;
+		}
+
 	}
 }

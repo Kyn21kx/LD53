@@ -6,12 +6,13 @@ using UnityEngine;
 public class PlayerInteractions : MonoBehaviour {
 
 	private SpartanTimer damageVfxTimer;
+	[SerializeField]
+	private MeshRenderer bodyRenderer;
 	private Material material;
 
 	private void Start() {
 		this.damageVfxTimer = new SpartanTimer(TimeMode.Framed);
-		var renderer = GetComponent<MeshRenderer>();
-		this.material = renderer.material;
+		this.material = this.bodyRenderer.material;
 	}
 
 	private void Update() { 

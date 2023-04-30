@@ -4,7 +4,8 @@ using UnityEngine;
 
 public enum ObstacleType {
 	Basic,
-	Interactable
+	Interactable,
+	CosmicRay,
 }
 
 public class TerrainSplit : MonoBehaviour {
@@ -20,12 +21,15 @@ public class TerrainSplit : MonoBehaviour {
 	private GameObject lanePrefab;
 	[SerializeField]
 	private GameObject obstaclePrefab;
+	[SerializeField]
+	private GameObject cosmicRayPrefab;
 	private float proportionalWidth;
+	[SerializeField]
+	private MeshRenderer scrollingVisuals;
 	private Material material;
 
 	private void Start() {
-		var renderer = GetComponent<MeshRenderer>();
-		this.material = renderer.material;
+		this.material = scrollingVisuals.material;
 		//Get the scale and divide into laneCount
 		float width = ScaleToWorld.x;
 		this.proportionalWidth = width / LANE_COUNT;
@@ -44,12 +48,16 @@ public class TerrainSplit : MonoBehaviour {
 	}
 
 	public void SpawnObstacles(ObstacleType type, int[] spawnFlags) {
+		type = type != ObstacleType.CosmicRay && this.IsFilledActive(spawnFlags) ? ObstacleType.CosmicRay : type;
 		switch (type) {
 			case ObstacleType.Basic:
 				this.SpawnObstacles(this.obstaclePrefab, spawnFlags);
 				break;
 			case ObstacleType.Interactable:
 				//Your code that will spawn interactable obstacles
+				break;
+			case ObstacleType.CosmicRay:
+				this.SpawnObstacles(this.cosmicRayPrefab, spawnFlags);
 				break;
 			default:
 				throw new System.NotImplementedException($"Obstacle of type {type} has not been implemented");
@@ -72,6 +80,13 @@ public class TerrainSplit : MonoBehaviour {
 		}
 	}
 
+	private bool IsFilledActive(int[] spawnFlags) {
+		for (int i = 0; i < spawnFlags.Length; i++) {
+			if (spawnFlags[i] == 0) return false;
+		}
+		return true;
+	}
+	
 	private int GetSkippedPosition() {
 		const int COSMIC_RAY_THRESHOLD = 20;
 		int cosmicRayProbability = Random.Range(0, 101);
@@ -97,10 +112,6 @@ public class TerrainSplit : MonoBehaviour {
 		Vector2 offset = this.material.mainTextureOffset;
 		offset.y -= timeStep * EntityFetcher.s_GameManager.travelSpeed * this.scrollFactor;
 		this.material.mainTextureOffset = offset;
-	}
-
-	private void SpawnCosmicRay() {
-		Debug.Log($"We have a ray!!");
 	}
 
 }
