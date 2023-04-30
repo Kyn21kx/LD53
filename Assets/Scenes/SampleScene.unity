@@ -5009,9 +5009,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   patchName: main
-  patchDir: /PdAssets/
+  patchDir: /PdAssets
   patch: {fileID: 102900000, guid: aa2f1e50c67cbff46a520c34e92c27c9, type: 3}
-  pipePrintToConsole: 0
+  pipePrintToConsole: 1
   pureDataEvents:
     Bang:
       m_PersistentCalls:
