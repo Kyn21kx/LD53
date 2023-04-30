@@ -99,5 +99,15 @@ namespace Auxiliars {
 			Vector3 towards = a - b;
 			return towards.sqrMagnitude;
 		}
+
+		public static bool ArrivedAt(Vector3 from, Vector3 to, float threshold = 0.2f) {
+			//Get the distance
+			float sqrDis = DistanceSqr(from, to);
+			if (sqrDis <= threshold * threshold) {
+				return true;
+			}
+			return false;
+		}
+
 	}
 }

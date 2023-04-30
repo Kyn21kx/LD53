@@ -37,7 +37,6 @@
 #X connect 15 0 0 0;
 #X connect 16 0 11 0;
 #X restore 65 142 pd clock;
-#X obj 249 81 coin;
 #N canvas -7 0 958 1028 obstacles 0;
 #X obj 46 26 inlet generate;
 #X obj 94 105 until;
@@ -109,8 +108,8 @@
 #X connect 13 0 11 0;
 #X connect 13 0 12 0;
 #X restore 54 228 pd drum;
-#X connect 0 0 3 0;
-#X connect 3 0 2 0;
-#X connect 3 0 7 0;
-#X connect 4 0 5 0;
-#X connect 5 0 0 0;
+#X connect 0 0 2 0;
+#X connect 2 0 1 0;
+#X connect 2 0 6 0;
+#X connect 3 0 4 0;
+#X connect 4 0 0 0;
