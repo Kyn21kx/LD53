@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Auxiliars;
 
 public class Obstacle : MonoBehaviour {
-
-	public float speed = 1f;
 	private Camera mainCam;
 
 	private void OnEnable() {
@@ -13,7 +11,7 @@ public class Obstacle : MonoBehaviour {
 
 	private void Update() {
 		Vector3 pos = this.transform.position;
-		pos.z -= Time.fixedDeltaTime * speed;
+		pos.z -= Time.deltaTime * EntityFetcher.s_GameManager.travelSpeed;
 		this.transform.position = pos;
 		if (this.ShouldDestroy()) {
 			Destroy(this.gameObject);

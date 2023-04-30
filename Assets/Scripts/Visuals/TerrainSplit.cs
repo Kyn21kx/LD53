@@ -11,8 +11,9 @@ public class TerrainSplit : MonoBehaviour {
 	
 	public const int LANE_COUNT = 4;
 	private const float FLOOR_LEVEL = 0.6f;
-
-	public float SpaceBetweenLanes => transform.localScale.x / LANE_COUNT;
+	public float scrollFactor = 0.5f;
+	public Vector3 ScaleToWorld => this.transform.localScale * 10f; //Because planes are reduced in scale by 10
+	public float SpaceBetweenLanes => ScaleToWorld.x / LANE_COUNT;
 	public float CenterSpace => SpaceBetweenLanes / 2f;
 	
 	[SerializeField]
@@ -20,10 +21,13 @@ public class TerrainSplit : MonoBehaviour {
 	[SerializeField]
 	private GameObject obstaclePrefab;
 	private float proportionalWidth;
+	private Material material;
 
 	private void Start() {
+		var renderer = GetComponent<MeshRenderer>();
+		this.material = renderer.material;
 		//Get the scale and divide into laneCount
-		float width = transform.localScale.x;
+		float width = ScaleToWorld.x;
 		this.proportionalWidth = width / LANE_COUNT;
 		Debug.Log($"ProportionalWidth: {this.proportionalWidth}");
 		for (int i = 0; i < LANE_COUNT + 1; i++) {
@@ -34,6 +38,10 @@ public class TerrainSplit : MonoBehaviour {
 			Instantiate(lanePrefab, instancePos, Quaternion.identity);
 		}
 		this.SpawnObstacles(this.obstaclePrefab);
+	}
+
+	private void Update() {
+		this.Scroll(Time.deltaTime);
 	}
 
 	public void SpawnObstacles(ObstacleType type) {
@@ -52,7 +60,7 @@ public class TerrainSplit : MonoBehaviour {
 	private void SpawnObstacles(GameObject obstacle) {
 		//Get the upper left position of the terrain
 		float leftCorner = transform.position.x - (SpaceBetweenLanes * (LANE_COUNT / 2f));
-		Vector3 upperLeft = new Vector3(leftCorner, transform.position.y, transform.position.z + (transform.localScale.z / 2f));
+		Vector3 upperLeft = new Vector3(leftCorner, transform.position.y, transform.position.z + (ScaleToWorld.z / 2f));
 		//Spawn them in a for loop
 		int skippedPosition = this.GetSkippedPosition();
 		const int STEP = 2;
@@ -88,6 +96,12 @@ public class TerrainSplit : MonoBehaviour {
 		scale.x = spaceBetweenLanes - (lanePrefab.transform.localScale.x * 10f);
 		instance.transform.localScale = scale;
 		return instance;
+	}
+
+	private void Scroll(float timeStep) {
+		Vector2 offset = this.material.mainTextureOffset;
+		offset.y -= timeStep * EntityFetcher.s_GameManager.travelSpeed * this.scrollFactor;
+		this.material.mainTextureOffset = offset;
 	}
 
 	private void SpawnCosmicRay() {

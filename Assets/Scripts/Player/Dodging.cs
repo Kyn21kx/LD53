@@ -39,7 +39,7 @@ public class Dodging : MonoBehaviour  {
         //Do the same thing we did for the spawnCubes
         //Get lowerLeft corner
         float leftCorner = terrainInfo.transform.position.x - (terrainInfo.SpaceBetweenLanes * (TerrainSplit.LANE_COUNT / 2f));
-        float lowerPart = terrainInfo.transform.position.z - (terrainInfo.transform.localScale.z / 2f);
+        float lowerPart = terrainInfo.transform.position.z - (terrainInfo.ScaleToWorld.z / 2f);
         Vector3 initialPos = new Vector3(leftCorner, terrainInfo.transform.position.y, lowerPart);
         //Spawn them in a for loop
         const int STEP = 2;
