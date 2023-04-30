@@ -19,7 +19,9 @@ public class TerrainSplit : MonoBehaviour {
 	private GameObject lanePrefab;
 	[SerializeField]
 	private GameObject obstaclePrefab;
-	private float proportionalWidth;
+    [SerializeField]
+    private GameObject interactableObstaclePrefab;
+    private float proportionalWidth;
 
 	private void Start() {
 		//Get the scale and divide into laneCount
@@ -36,20 +38,32 @@ public class TerrainSplit : MonoBehaviour {
 		this.SpawnObstacles(this.obstaclePrefab);
 	}
 
-	public void SpawnObstacles(ObstacleType type) {
-		switch (type) {
-			case ObstacleType.Basic:
-				this.SpawnObstacles(this.obstaclePrefab);
-				break;
-			case ObstacleType.Interactable:
-				//Your code that will spawn interactable obstacles
-				break;
-			default:
-				throw new System.NotImplementedException($"Obstacle of type {type} has not been implemented");
-		}
-	}
+    public void SpawnObstacles(ObstacleType type)
+    {
+        switch (type)
+        {
+            case ObstacleType.Basic:
+                this.SpawnObstacles(this.obstaclePrefab);
+                break;
+            case ObstacleType.Interactable:
+                if (Random.Range(0, 2) == 0)
+                {
+                    // Spawn interactable obstacle
+                    Vector3 spawnPos = new Vector3(
+                        transform.position.x + (Random.Range(-1, 2) * CenterSpace),
+                        transform.position.y + obstaclePrefab.transform.localScale.y,
+                        transform.position.z + (transform.localScale.z / 2f)
+                    );
+                    Instantiate(interactableObstaclePrefab, spawnPos, Quaternion.identity);
+                }
+                break;
+            default:
+                throw new System.NotImplementedException($"Obstacle of type {type} has not been implemented");
+        }
+    }
 
-	private void SpawnObstacles(GameObject obstacle) {
+
+    private void SpawnObstacles(GameObject obstacle) {
 		//Get the upper left position of the terrain
 		float leftCorner = transform.position.x - (SpaceBetweenLanes * (LANE_COUNT / 2f));
 		Vector3 upperLeft = new Vector3(leftCorner, transform.position.y, transform.position.z + (transform.localScale.z / 2f));
@@ -63,10 +77,19 @@ public class TerrainSplit : MonoBehaviour {
 			}
 			bool shouldSkip = (int)(i / STEP) == skippedPosition;
 			if (shouldSkip) continue;
-			//Otherwise, spawn the object
-			//Keep a reference, or destroy once they pass a certain threshold
-			this.SpawnObstacleAt(obstacle, upperLeft, CenterSpace, SpaceBetweenLanes, i);
-		}
+            //Otherwise, spawn the object
+            //Keep a reference, or destroy once they pass a certain threshold
+            if (Random.Range(0, 2) == 1)
+            {
+                this.SpawnObstacleAt(obstacle, upperLeft, CenterSpace, SpaceBetweenLanes, i);
+            }
+            else
+            {
+                GameObject interactableObstacle = Instantiate(interactableObstaclePrefab, upperLeft, Quaternion.identity);
+                interactableObstacle.GetComponent<InteractableObstacle>().points = Random.Range(1, 5);
+                interactableObstacle.transform.position += new Vector3(CenterSpace * (i - 2), 0f, 0f);
+            }
+        }
 	}
 
 	private int GetSkippedPosition() {

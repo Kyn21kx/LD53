@@ -557,6 +557,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lanePrefab: {fileID: 7308420705365502436, guid: 06ac6b8757d32ca4dae5306cff81984f, type: 3}
   obstaclePrefab: {fileID: 4479490674464545278, guid: beb5e933b9789fa42a3459fa56907ea2, type: 3}
+  interactableObstaclePrefab: {fileID: 2946002743236809131, guid: 755938758e70303409097895b0111183, type: 3}
 --- !u!65 &1664778909
 BoxCollider:
   m_ObjectHideFlags: 0
