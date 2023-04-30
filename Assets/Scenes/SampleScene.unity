@@ -4991,7 +4991,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 148890263}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6710605bb1ffa7a40befc70a0c72942c, type: 3}
   m_Name: 
@@ -5003,13 +5003,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 148890263}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ccf14f47a1578f940b936cf4b12c2889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   patchName: main
-  patchDir: gAssets/
+  patchDir: /PdAssets/
   patch: {fileID: 102900000, guid: aa2f1e50c67cbff46a520c34e92c27c9, type: 3}
   pipePrintToConsole: 0
   pureDataEvents:
