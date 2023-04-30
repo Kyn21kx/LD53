@@ -21,4 +21,10 @@ public class MusicManager : MonoBehaviour {
 		this.obstacleGenerator.SpawnObstacles(ObstacleType.Basic);
 	}
 
+	public void OnReceiveList(string name, object[] list) { 
+		Debug.Log($"Event received from patch! Name: {name}, Count: {list.Length}");
+		if (list.Length < 1) return;
+		this.obstacleGenerator.SpawnObstacles(ObstacleType.Basic);
+	}
+
 }
