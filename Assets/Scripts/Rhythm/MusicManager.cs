@@ -8,7 +8,8 @@ public enum PureDataEvent {
 	StartStop,
 	StartGame,
 	ParryCheck,
-	ParryResult
+	ParryResult,
+	WindowSize
 };
 
 [RequireComponent(typeof(LibPdInstance))]
@@ -21,6 +22,7 @@ public class MusicManager : MonoBehaviour {
 		{ "start-game", PureDataEvent.StartGame },
 		{ "parry-check", PureDataEvent.ParryCheck }, //Just send a bang
 		{ "parry-result", PureDataEvent.ParryResult },
+		{ "window-size", PureDataEvent.WindowSize },
 
 	};
 	const int MEASURE_VALUE = 4;
@@ -28,6 +30,8 @@ public class MusicManager : MonoBehaviour {
 
 	[SerializeField]
 	private float bpm;
+	[SerializeField, Range(0f, 200f)]
+	private float windowSize;
 	public float TimeToOneMeasure => MEASURE_VALUE * (this.bpm / SECONDS_IN_MINUTE);
     private LibPdInstance pdInstance;
 	private TerrainSplit obstacleGenerator;
@@ -44,6 +48,7 @@ public class MusicManager : MonoBehaviour {
 			this.pdInstance.Bind(key);
 		}
 		this.SendFloat("bpm", bpm);
+		this.SendFloat("window-size", windowSize);
 	}
 
 	public void OnReceiveFloat(string name, float value) {
@@ -67,6 +72,8 @@ public class MusicManager : MonoBehaviour {
 			case PureDataEvent.ParryCheck:
 				throw new System.Exception($"{name} is a send-only event, but received {value} instead!");
 			case PureDataEvent.StartGame:
+				break;
+			case PureDataEvent.WindowSize:
 				break;
 			default:
 				throw new System.NotImplementedException($"The event {e} has not been implemented!");

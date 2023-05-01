@@ -15,6 +15,8 @@ public class Score : MonoBehaviour {
 	[SerializeField]
 	private TextMeshProUGUI comboText;
 	[SerializeField]
+	private GameObject comboImg;
+	[SerializeField]
 	private TextMeshProUGUI packetsText;
 	[SerializeField]
 	private GameObject packetPrefab;
@@ -23,6 +25,7 @@ public class Score : MonoBehaviour {
 
 	private PostProcessVolume volume;
 	private CameraShake shakeRef;
+	private Stack<PacketRotate> packetRotateRef;
 	private int saturationIndex;
 
 	public float ScoreValue { 
@@ -39,12 +42,14 @@ public class Score : MonoBehaviour {
 				if (this.combo > 10) {
 					this.CrashCombo();
 				}
+				this.comboImg.SetActive(false);
 				this.comboText.text = string.Empty;
 				this.combo = value;
 				return;
 			}
+			this.comboImg.SetActive(true);
 			this.combo = value;
-			this.comboText.text = $"Combo: x{value}";
+			this.comboText.text = $"{value}";
 		}
 	}
 
@@ -55,7 +60,7 @@ public class Score : MonoBehaviour {
 				EntityFetcher.s_GameManager.EndGame();
 			}
 			this.packets = value;
-			this.packetsText.text = $"Packets left: {value}";
+			this.packetsText.text = $"{value}";
 		}
 	}
 	private float scoreValue;
@@ -64,6 +69,7 @@ public class Score : MonoBehaviour {
 	private int packets;
 
 	private void Start() {
+		this.packetRotateRef = new Stack<PacketRotate>();
 		this.volume = EntityFetcher.s_MainCamera.GetComponent<PostProcessVolume>();
 		this.saturationIndex = -1;
 		for (int i = 0; i < this.volume.profile.settings.Count; i++) {
@@ -78,15 +84,16 @@ public class Score : MonoBehaviour {
 		this.ScoreValue = 0;
 		this.Combo = 0;
 		this.Packets = packets;
-
+		const float START_X = -3;
 		//Initialize packet visuals
-		const float START_X = -3.27f;
-		const float START_Z = -3.27f;
 		//Spawn around a pivot
 		for (int i = 0; i < packets; i++) {
-			Vector3 offsetPosition = new Vector3(START_X - (0.5f * i), 0f, START_Z + (0.5f * i));
-			var instance = Instantiate(this.packetPrefab, this.packetPivot.transform);
-			instance.transform.localPosition = offsetPosition;
+			//NEVER DO THISSS
+			Vector3 offsetPosition = new Vector3(START_X + (1.5f * i), 3f, 0f);
+			var instance = Instantiate(this.packetPrefab, offsetPosition, Quaternion.identity);
+			var prRef = instance.GetComponent<PacketRotate>();
+			prRef.startingPos = offsetPosition;
+			this.packetRotateRef.Push(prRef);
 		}
 	}
 
@@ -113,6 +120,13 @@ public class Score : MonoBehaviour {
 		settings.saturation.value = LOW_SATURATION;
 		//Camera shake
 		this.shakeRef.Shake(0.5f);
+	}
+
+	public void DropPacket() {
+		this.Packets--;
+		PacketRotate toDestroy = this.packetRotateRef.Pop();
+		Destroy(toDestroy.gameObject);
+		//Move them along?
 	}
 
 }

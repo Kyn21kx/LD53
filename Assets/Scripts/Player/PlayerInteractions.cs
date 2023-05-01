@@ -52,17 +52,19 @@ public class PlayerInteractions : MonoBehaviour {
 			this.scoreRef.ResetCombo();
 			this.material.color = Color.red;
 			this.damageVfxTimer.Reset();
-			this.scoreRef.Packets--;
+			this.scoreRef.DropPacket();
 		}
 		bool inLayer = SpartanMath.IsInLayerMask(other.gameObject.layer, this.parryRef.ParryMask);
 		if (parryRef.IsBlocking && inLayer) { 
 			parryRef.DeactivateForceField();
+			float value = this.parryRef.CurrParryState == ParryResult.PERFECT ? 5.0f : 1.0f;
+			this.ScorePoint((Collider)other, value);
 			Destroy(other.gameObject);
 		}
 	}
 
-	private void ScorePoint(Collider other) {
-		this.scoreRef.ScoreValue++;
+	private void ScorePoint(Collider other, float value = 1.0f) {
+		this.scoreRef.ScoreValue += value;
 		this.scoreRef.Combo++;
 		Destroy(other.gameObject);
 	}
