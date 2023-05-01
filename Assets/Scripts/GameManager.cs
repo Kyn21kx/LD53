@@ -22,8 +22,10 @@ public class GameManager : MonoBehaviour {
 	private MusicManager musicManager;
 	private CameraShake shakeRef;
 	private PostProcessVolume postProcessVolume;
+	private GptPythonConnection gpt;
 
 	private void Start() {
+		this.InitializeMessage();
 		this.Paused = false;
 		this.GameOver = false;
 		this.pauseMenu.SetActive(this.Paused);
@@ -76,5 +78,10 @@ public class GameManager : MonoBehaviour {
 	public T GetPostProcessingSettingsByIndex<T>(int index) where T : PostProcessEffectSettings {
 		if (index == -1 || index >= this.postProcessVolume.profile.settings.Count) return null;
 		return this.postProcessVolume.profile.settings[index] as T;
+	}
+
+	private void InitializeMessage() {
+		string msg = this.gpt.GetResponse(this.gpt.badPrompt);
+		Debug.Log(msg);
 	}
 }
