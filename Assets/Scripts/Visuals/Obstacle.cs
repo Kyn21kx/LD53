@@ -17,7 +17,6 @@ public class Obstacle : MonoBehaviour {
 		pos.z -= Time.deltaTime * EntityFetcher.s_GameManager.travelSpeed;
 		this.transform.position = pos;
 		if (this.ShouldDestroy()) {
-			Debug.Log($"Time to destroy: {this.timer.GetCurrentTime(TimeScaleMode.Seconds)}");
 			this.timer.Stop();
 			Destroy(this.gameObject);
 		}
