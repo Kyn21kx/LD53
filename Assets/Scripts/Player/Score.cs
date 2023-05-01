@@ -16,6 +16,10 @@ public class Score : MonoBehaviour {
 	private TextMeshProUGUI comboText;
 	[SerializeField]
 	private TextMeshProUGUI packetsText;
+	[SerializeField]
+	private GameObject packetPrefab;
+	[SerializeField]
+	private GameObject packetPivot;
 
 	private PostProcessVolume volume;
 	private CameraShake shakeRef;
@@ -73,6 +77,17 @@ public class Score : MonoBehaviour {
 		this.shakeRef = EntityFetcher.s_MainCamera.GetComponent<CameraShake>();
 		this.ScoreValue = 0;
 		this.Combo = 0;
+		this.Packets = packets;
+
+		//Initialize packet visuals
+		const float START_X = -3.27f;
+		const float START_Z = -3.27f;
+		//Spawn around a pivot
+		for (int i = 0; i < packets; i++) {
+			Vector3 offsetPosition = new Vector3(START_X - (0.5f * i), 0f, START_Z + (0.5f * i));
+			var instance = Instantiate(this.packetPrefab, this.packetPivot.transform);
+			instance.transform.localPosition = offsetPosition;
+		}
 	}
 
 	private void Update() {

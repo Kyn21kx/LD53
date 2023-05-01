@@ -27,6 +27,7 @@ public class Parry : MonoBehaviour {
 	private Material material;
 	[SerializeField]
 	private ParticleSystem explosionEffect;
+	private MusicManager musicManager;
 
 	//So, we press a button, and start the timer, then stop it when we get hit
 	private SpartanTimer parryTimerInterval;
@@ -48,6 +49,7 @@ public class Parry : MonoBehaviour {
 		this.meshRenderer.gameObject.SetActive(false);
 		this.explosionEffect.Stop();
 		this.parryTimerInterval = new SpartanTimer(TimeMode.Framed);
+		this.musicManager = EntityFetcher.s_GameManager.GetComponent<MusicManager>();
 	}
 
 	private void Update() {
@@ -64,7 +66,7 @@ public class Parry : MonoBehaviour {
 		//Raycast forward and check if we can parry
 		RaycastHit hit;
 		if (Input.GetKeyDown(KeyCode.Q) && this.IsParryEnabled(out hit) && !this.parryTimerInterval.Started) {
-			Debug.Log($"We hit {hit.transform.name}");
+			this.musicManager.SendBang("parry-check");
 			this.parryTimerInterval.Reset();
 			this.ResetShaderParams();
 		}
