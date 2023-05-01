@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ParryResult {
-	NONE,
-	MISSED,
+	NONE = -1,
+	MISSED = 0,
 	GOOD,
 	PERFECT
 };

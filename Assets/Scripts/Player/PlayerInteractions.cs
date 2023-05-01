@@ -52,6 +52,7 @@ public class PlayerInteractions : MonoBehaviour {
 			this.scoreRef.ResetCombo();
 			this.material.color = Color.red;
 			this.damageVfxTimer.Reset();
+			this.scoreRef.Packets--;
 		}
 		bool inLayer = SpartanMath.IsInLayerMask(other.gameObject.layer, this.parryRef.ParryMask);
 		if (parryRef.IsBlocking && inLayer) { 

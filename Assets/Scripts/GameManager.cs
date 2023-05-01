@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	public float travelSpeed = 6f;
 
 	public bool Paused { get; private set; }
+	public bool GameOver { get; private set; }
 
 	[SerializeField]
 	private TextMeshProUGUI distanceText;
@@ -17,11 +18,13 @@ public class GameManager : MonoBehaviour {
 
 	private void Start() {
 		this.Paused = false;
+		this.GameOver = false;
 		this.pauseMenu.SetActive(this.Paused);
 		this.musicManager = GetComponent<MusicManager>();
 	}
 
 	private void Update() {
+		if (this.GameOver) return;
 		this.HandleInput();
 		this.distanceText.text = $"Distance: {this.DistanceCovered}m";
 	}
@@ -38,6 +41,11 @@ public class GameManager : MonoBehaviour {
 		this.pauseMenu.SetActive(this.Paused);
 		this.musicManager.SendBang("start-stop");
 		Time.timeScale = 1f;
+	}
+
+	public void EndGame() {
+		Destroy(EntityFetcher.s_Player);
+		this.GameOver = true;
 	}
 
 	private void HandleInput() {
