@@ -17,10 +17,6 @@ public class Dodging : MonoBehaviour  {
     //set it to something random for now
     [SerializeField] 
     private float moveSpeed = 4f;
-    [SerializeField] 
-    private float jumpForce = 4f;
-    [SerializeField] 
-    private float maxHeight = 1f;
 
     private MovementState state;
 
@@ -29,8 +25,7 @@ public class Dodging : MonoBehaviour  {
     private TerrainSplit terrainInfo;
 
     private float DashDuration => this.terrainInfo.CenterSpace / this.moveSpeed;
-    private float JumpDuration => this.maxHeight / this.jumpForce;
-
+    
     private bool Grounded => System.MathF.Round(this.rig.transform.position.y, 2) == 0f;
 
     private int dashDirection = 0;

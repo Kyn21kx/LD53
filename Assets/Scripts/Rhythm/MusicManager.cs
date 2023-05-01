@@ -6,6 +6,7 @@ public enum PureDataEvent {
 	Obstacles,
 	Bpm,
 	StartStop,
+	StartGame,
 	ParryCheck,
 	ParryResult
 };
@@ -17,14 +18,17 @@ public class MusicManager : MonoBehaviour {
 		{ "obstacles", PureDataEvent.Obstacles },
 		{ "bpm", PureDataEvent.Bpm },
 		{ "start-stop", PureDataEvent.StartStop },
+		{ "start-game", PureDataEvent.StartGame },
 		{ "parry-check", PureDataEvent.ParryCheck }, //Just send a bang
 		{ "parry-result", PureDataEvent.ParryResult },
 
 	};
+	const int MEASURE_VALUE = 4;
+	const float SECONDS_IN_MINUTE = 60f;
 
 	[SerializeField]
 	private float bpm;
-
+	public float TimeToOneMeasure => MEASURE_VALUE * (this.bpm / SECONDS_IN_MINUTE);
     private LibPdInstance pdInstance;
 	private TerrainSplit obstacleGenerator;
 	private Parry parryRef;
@@ -38,7 +42,8 @@ public class MusicManager : MonoBehaviour {
 		this.pdInstance = GetComponent<LibPdInstance>();
 		foreach (var key in this.eventDictionary.Keys) {
 			this.pdInstance.Bind(key);
-		} 
+		}
+		this.SendFloat("bpm", bpm);
 	}
 
 	public void OnReceiveFloat(string name, float value) {
@@ -52,13 +57,17 @@ public class MusicManager : MonoBehaviour {
 				this.AddToBuffer((int)value);
 				break;
 			case PureDataEvent.Bpm:
+				Debug.Log($"The BPM is: {value}");
 				break;
 			case PureDataEvent.ParryResult:
 				this.ConvertAndSendParryInfo((int)value);
 				break;
 			case PureDataEvent.StartStop:
+				break;
 			case PureDataEvent.ParryCheck:
 				throw new System.Exception($"{name} is a send-only event, but received {value} instead!");
+			case PureDataEvent.StartGame:
+				break;
 			default:
 				throw new System.NotImplementedException($"The event {e} has not been implemented!");
 		}
