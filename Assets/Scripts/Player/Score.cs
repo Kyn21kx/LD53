@@ -89,8 +89,7 @@ public class Score : MonoBehaviour {
 	}
 
 	public ColorGrading GetColorGradingSettings() {
-		if (this.saturationIndex == -1) return null;
-		return this.volume.profile.settings[this.saturationIndex] as ColorGrading;
+		return EntityFetcher.s_GameManager.GetPostProcessingSettingsByIndex<ColorGrading>(this.saturationIndex);
 	}
 
 	private void CrashCombo() {

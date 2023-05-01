@@ -23,10 +23,12 @@ public class MusicManager : MonoBehaviour {
 		{ "parry-result", PureDataEvent.ParryResult },
 
 	};
+	const int MEASURE_VALUE = 4;
+	const float SECONDS_IN_MINUTE = 60f;
 
 	[SerializeField]
 	private float bpm;
-
+	public float TimeToOneMeasure => MEASURE_VALUE * (this.bpm / SECONDS_IN_MINUTE);
     private LibPdInstance pdInstance;
 	private TerrainSplit obstacleGenerator;
 	private Parry parryRef;
