@@ -23,6 +23,8 @@ public class TerrainSplit : MonoBehaviour {
 	private GameObject obstaclePrefab;
 	[SerializeField]
 	private GameObject cosmicRayPrefab;
+	[SerializeField]
+	private GameObject scoringPrefab;
 	private float proportionalWidth;
 	[SerializeField]
 	private MeshRenderer scrollingVisuals;
@@ -64,6 +66,7 @@ public class TerrainSplit : MonoBehaviour {
 	}
 
 	private void SpawnObstacles(GameObject obstacle, int[] spawnFlags) {
+		if (this.IsFilledUnactive(spawnFlags)) return;
 		//Get the upper left position of the terrain
 		float leftCorner = transform.position.x - (SpaceBetweenLanes * (LANE_COUNT / 2f));
 		Vector3 upperLeft = new Vector3(leftCorner, transform.position.y, transform.position.z + (ScaleToWorld.z / 2f));
@@ -72,12 +75,17 @@ public class TerrainSplit : MonoBehaviour {
 		for (int i = 1; i < LANE_COUNT * 2; i += STEP) {
 			int nativeIndex = (int)(i / STEP);
 			bool shouldSkip = spawnFlags[nativeIndex] == 0;
-			if (shouldSkip) continue;
+			if (shouldSkip) {
+				this.SpawnObstacleAt(this.scoringPrefab, upperLeft, CenterSpace, SpaceBetweenLanes, i);
+				continue;
+			}
 			//Otherwise, spawn the object
 			//Keep a reference, or destroy once they pass a certain threshold
 			this.SpawnObstacleAt(obstacle, upperLeft, CenterSpace, SpaceBetweenLanes, i);
 		}
 	}
+
+
 
 	private bool IsFilledActive(int[] spawnFlags) {
 		for (int i = 0; i < spawnFlags.Length; i++) {
@@ -85,7 +93,14 @@ public class TerrainSplit : MonoBehaviour {
 		}
 		return true;
 	}
-	
+
+	private bool IsFilledUnactive(int[] spawnFlags) {
+		for (int i = 0; i < spawnFlags.Length; i++) {
+			if (spawnFlags[i] == 1) return false;
+		}
+		return true;
+	}
+
 	private int GetSkippedPosition() {
 		const int COSMIC_RAY_THRESHOLD = 20;
 		int cosmicRayProbability = Random.Range(0, 101);

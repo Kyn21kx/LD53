@@ -8,6 +8,7 @@ TagManager:
   - Obstacle
   - Terrain
   - Eraser
+  - Score
   layers:
   - Default
   - TransparentFX

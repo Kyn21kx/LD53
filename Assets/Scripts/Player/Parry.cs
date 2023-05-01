@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum ParryResult {
+	NONE,
 	MISSED,
 	GOOD,
 	PERFECT
@@ -19,6 +20,7 @@ public class Parry : MonoBehaviour {
 
 	public bool IsBlocking => this.parryTimerInterval.Started;
 	public LayerMask ParryMask => this.parryMask;
+	public ParryResult CurrParryState { get; private set; }
 
 	[SerializeField]
 	private MeshRenderer meshRenderer;
@@ -41,6 +43,7 @@ public class Parry : MonoBehaviour {
 	private float fresnel;
 
 	private void Start() {
+		this.CurrParryState = ParryResult.NONE;
 		this.material = this.meshRenderer.material;
 		this.meshRenderer.gameObject.SetActive(false);
 		this.explosionEffect.Stop();
@@ -93,6 +96,7 @@ public class Parry : MonoBehaviour {
 	public void DeactivateForceField() {
 		this.parryTimerInterval.Stop();
 		this.explosionEffect.Play();
+		this.CurrParryState = ParryResult.NONE;
 		//Some fancy particle effects here maybe
 		this.meshRenderer.gameObject.SetActive(false);
 	}
@@ -117,7 +121,7 @@ public class Parry : MonoBehaviour {
 
 	public void SendParryResult(ParryResult result) {
 		//We have a result, damage the player, add combo multipliers, show it to the screen and stuff
-		
+		this.CurrParryState = result;
 	}
 
 }

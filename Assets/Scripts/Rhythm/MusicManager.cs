@@ -53,16 +53,25 @@ public class MusicManager : MonoBehaviour {
 				break;
 			case PureDataEvent.Bpm:
 				break;
-			case PureDataEvent.StartStop:
-				break;
 			case PureDataEvent.ParryResult:
 				this.ConvertAndSendParryInfo((int)value);
 				break;
+			case PureDataEvent.StartStop:
 			case PureDataEvent.ParryCheck:
-				throw new System.Exception($"Parry check is a send-only event, but received {value} instead!");
+				throw new System.Exception($"{name} is a send-only event, but received {value} instead!");
 			default:
 				throw new System.NotImplementedException($"The event {e} has not been implemented!");
 		}
+	}
+
+	public void SendFloat(string name, float data) {
+		this.ValidateEventOrThrow(name);
+		this.pdInstance.SendFloat(name, data);
+	}
+
+	public void SendBang(string name) {
+		this.ValidateEventOrThrow(name);
+		this.pdInstance.SendBang(name);
 	}
 
 	private void AddToBuffer(int value) {
