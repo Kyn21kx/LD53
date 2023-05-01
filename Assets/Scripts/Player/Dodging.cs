@@ -63,7 +63,6 @@ public class Dodging : MonoBehaviour  {
             Vector3 center = initialPos;
             center.x = initialPos.x + (terrainInfo.CenterSpace * i);
 			this.LanePositions.Add(center);
-            Debug.Log($"Lane position #{LanePositions.Count - 1}: {this.LanePositions[LanePositions.Count - 1]}");
         }
     }
 

@@ -115,5 +115,9 @@ namespace Auxiliars {
 			return dis <= threshold;
 		}
 
+		public static bool IsInLayerMask(int value, LayerMask mask) {
+			return (mask & 1 << value) == 1 << value;
+		}
+
 	}
 }

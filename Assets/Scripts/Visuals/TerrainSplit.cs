@@ -33,7 +33,6 @@ public class TerrainSplit : MonoBehaviour {
 		//Get the scale and divide into laneCount
 		float width = ScaleToWorld.x;
 		this.proportionalWidth = width / LANE_COUNT;
-		Debug.Log($"ProportionalWidth: {this.proportionalWidth}");
 		for (int i = 0; i < LANE_COUNT + 1; i++) {
 			Vector3 instancePos = transform.position;
 			instancePos.x += (proportionalWidth * (i - 2));

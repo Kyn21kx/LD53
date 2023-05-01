@@ -5432,7 +5432,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.06078722, y: 0, z: 0, w: 0.99815077}
-  m_LocalPosition: {x: 1.26, y: 7.65, z: -30.34}
+  m_LocalPosition: {x: 0, y: 7.65, z: -30.34}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10722,4 +10722,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 58268563}
   explosionEffect: {fileID: 1321332056}
+  parryDetectDistance: 50
+  parryMask:
+    serializedVersion: 2
+    m_Bits: 128
   animationSpeed: 7

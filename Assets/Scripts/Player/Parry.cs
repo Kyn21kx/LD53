@@ -17,6 +17,9 @@ public class Parry : MonoBehaviour {
 	private const float END_NOISE_STRENGTH = 3f;
 	private const float END_FRESNEL = 3f;
 
+	public bool IsBlocking => this.parryTimerInterval.Started;
+	public LayerMask ParryMask => this.parryMask;
+
 	[SerializeField]
 	private MeshRenderer meshRenderer;
 	private Material material;
@@ -25,6 +28,11 @@ public class Parry : MonoBehaviour {
 
 	//So, we press a button, and start the timer, then stop it when we get hit
 	private SpartanTimer parryTimerInterval;
+
+	[SerializeField]
+	private float parryDetectDistance;
+	[SerializeField]
+	private LayerMask parryMask;
 
 	[SerializeField]
 	private float animationSpeed = 2f;
@@ -51,7 +59,9 @@ public class Parry : MonoBehaviour {
 
 	private void HandleInput() {
 		//Raycast forward and check if we can parry
-		if (Input.GetKeyDown(KeyCode.Q) && !this.parryTimerInterval.Started) {
+		RaycastHit hit;
+		if (Input.GetKeyDown(KeyCode.Q) && this.IsParryEnabled(out hit) && !this.parryTimerInterval.Started) {
+			Debug.Log($"We hit {hit.transform.name}");
 			this.parryTimerInterval.Reset();
 			this.ResetShaderParams();
 		}
@@ -80,16 +90,29 @@ public class Parry : MonoBehaviour {
 		this.explosionEffect.Stop();
 	}
 
-	private void DeactivateForceField() {
+	public void DeactivateForceField() {
 		this.parryTimerInterval.Stop();
 		this.explosionEffect.Play();
 		//Some fancy particle effects here maybe
 		this.meshRenderer.gameObject.SetActive(false);
 	}
 
-	private bool IsParryEnabled() {
+	private bool IsParryEnabled(out RaycastHit hit) {
 		//Raycast forward, see if the obstacle is in the proper layer, if so, parry
+		RaycastHit[] hits = Physics.RaycastAll(this.transform.position, transform.forward, this.parryDetectDistance, this.parryMask);
+		foreach (var localHit in hits) {
+			if (SpartanMath.IsInLayerMask(localHit.transform.gameObject.layer, this.parryMask)) {
+				hit = localHit;
+				return true;
+			}
+		}
+		hit = default(RaycastHit);
 		return false;
+	}
+
+	private void OnDrawGizmos() {
+		Gizmos.color = Color.cyan;
+		Gizmos.DrawRay(this.transform.position, transform.forward.normalized * this.parryDetectDistance);
 	}
 
 	public void SendParryResult(ParryResult result) {

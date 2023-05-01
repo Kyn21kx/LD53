@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Parry))]
 public class PlayerInteractions : MonoBehaviour {
 
 	private SpartanTimer damageVfxTimer;
 	[SerializeField]
 	private MeshRenderer bodyRenderer;
 	private Material material;
+	private Parry parryRef;
 
 	private void Start() {
+		this.parryRef = GetComponent<Parry>();
 		this.damageVfxTimer = new SpartanTimer(TimeMode.Framed);
 		this.material = this.bodyRenderer.material;
 	}
@@ -31,13 +34,17 @@ public class PlayerInteractions : MonoBehaviour {
 		//TODO: Replace with switch expression
 		if (!other.CompareTag("Obstacle")) return;
 		//Damage the player
-		Damage();
+		Damage(other);
 	}
 
-	private void Damage() {
+	private void Damage(Collider other) {
 		Debug.Log("Damaged!");
 		this.material.color = Color.red;
 		this.damageVfxTimer.Reset();
+		bool inLayer = SpartanMath.IsInLayerMask(other.gameObject.layer, this.parryRef.ParryMask);
+		if (parryRef.IsBlocking && inLayer) { 
+			parryRef.DeactivateForceField();
+		}
 	}
 
 

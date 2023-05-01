@@ -42,7 +42,7 @@ public class MusicManager : MonoBehaviour {
 	}
 
 	public void OnReceiveFloat(string name, float value) {
-		Debug.Log($"Event received from patch! Name: {name}, Value: {value}");
+		//Debug.Log($"Event received from patch! Name: {name}, Value: {value}");
 		
 		PureDataEvent e = this.ValidateEventOrThrow(name);
 
@@ -69,6 +69,7 @@ public class MusicManager : MonoBehaviour {
 		this.spawnBuffer.Add(value);
 		//If we hit 4, spawn the obstacles, and clear the buffer
 		if (this.spawnBuffer.Count >= TerrainSplit.LANE_COUNT) {
+			
 			this.obstacleGenerator.SpawnObstacles(ObstacleType.Basic, this.spawnBuffer.ToArray());
 			this.spawnBuffer.Clear();
 		}
