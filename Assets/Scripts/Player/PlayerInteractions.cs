@@ -44,6 +44,7 @@ public class PlayerInteractions : MonoBehaviour {
 		bool inLayer = SpartanMath.IsInLayerMask(other.gameObject.layer, this.parryRef.ParryMask);
 		if (parryRef.IsBlocking && inLayer) { 
 			parryRef.DeactivateForceField();
+			Destroy(other.gameObject);
 		}
 	}
 
