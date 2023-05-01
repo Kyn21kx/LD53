@@ -7,9 +7,11 @@ public static class EntityFetcher {
 	public static TerrainSplit s_TerrainSplit { get; private set; }
 	public static GameObject s_Player { get; private set; }
 	public static Camera s_MainCamera { get; private set; }
+	public static Canvas s_Canvas { get; private set; }
 	static EntityFetcher() {
 		s_GameManager = FetchWithTag<GameManager>("GameManager");
 		s_TerrainSplit = FetchWithTag<TerrainSplit>("Terrain");
+		s_Canvas = FetchWithTag<Canvas>("Canvas");
 		s_Player = FetchWithTag("Player");
 		s_MainCamera = Camera.main;
 	}

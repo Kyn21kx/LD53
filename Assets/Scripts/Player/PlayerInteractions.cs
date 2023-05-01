@@ -47,7 +47,8 @@ public class PlayerInteractions : MonoBehaviour {
 	}
 
 	private void Damage(Collider other) {
-		if (this.parryRef.CurrParryState == ParryResult.NONE || this.parryRef.CurrParryState == ParryResult.MISSED) {
+		ParryResult res = this.parryRef.CurrParryState;
+		if (res == ParryResult.NONE || res == ParryResult.MISSED) {
 			Debug.Log("Damaged!");
 			this.scoreRef.ResetCombo();
 			this.material.color = Color.red;
@@ -57,7 +58,10 @@ public class PlayerInteractions : MonoBehaviour {
 		bool inLayer = SpartanMath.IsInLayerMask(other.gameObject.layer, this.parryRef.ParryMask);
 		if (parryRef.IsBlocking && inLayer) { 
 			parryRef.DeactivateForceField();
-			float value = this.parryRef.CurrParryState == ParryResult.PERFECT ? 5.0f : 1.0f;
+			float value = res == ParryResult.PERFECT ? 5.0f : 1.0f;
+			var instance = Instantiate(this.parryRef.parryIndicatorPrefab).GetComponent<ParryIndicator>();
+			instance.transform.parent = EntityFetcher.s_Canvas.transform;
+			instance.Initialize(res);
 			this.ScorePoint((Collider)other, value);
 			Destroy(other.gameObject);
 		}

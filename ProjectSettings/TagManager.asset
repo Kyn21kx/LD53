@@ -9,6 +9,7 @@ TagManager:
   - Terrain
   - Eraser
   - Score
+  - Canvas
   layers:
   - Default
   - TransparentFX

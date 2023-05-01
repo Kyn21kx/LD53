@@ -89,7 +89,7 @@ public class Score : MonoBehaviour {
 		//Spawn around a pivot
 		for (int i = 0; i < packets; i++) {
 			//NEVER DO THISSS
-			Vector3 offsetPosition = new Vector3(START_X + (1.5f * i), 3f, 0f);
+			Vector3 offsetPosition = new Vector3(START_X + (1.5f * i), 3f, -2f);
 			var instance = Instantiate(this.packetPrefab, offsetPosition, Quaternion.identity);
 			var prRef = instance.GetComponent<PacketRotate>();
 			prRef.startingPos = offsetPosition;

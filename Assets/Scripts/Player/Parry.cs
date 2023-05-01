@@ -27,6 +27,7 @@ public class Parry : MonoBehaviour {
 	private Material material;
 	[SerializeField]
 	private ParticleSystem explosionEffect;
+	public GameObject parryIndicatorPrefab;
 	private MusicManager musicManager;
 
 	//So, we press a button, and start the timer, then stop it when we get hit
