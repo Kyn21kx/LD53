@@ -9,6 +9,7 @@ public enum MovementState {
 }
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Animator))]
 public class Dodging : MonoBehaviour  {
 
     private const int LEFT = -1;
@@ -30,11 +31,13 @@ public class Dodging : MonoBehaviour  {
 
     private int dashDirection = 0;
     private Rigidbody rig;
+    private Animator controller;
 
     SpartanTimer dashTimer;
 
 
     private void Start() {
+        this.controller = GetComponent<Animator>();
         this.state = MovementState.Walking;
         this.dashDirection = 0;
         this.dashTimer = new SpartanTimer(TimeMode.Framed);
@@ -65,6 +68,15 @@ public class Dodging : MonoBehaviour  {
         this.HandleInput();
         if (this.AbleToDash()) {
             this.state = MovementState.Dashing;
+            switch (this.dashDirection) {
+                case LEFT:
+                    this.controller.SetTrigger("Left");
+                    break;
+
+                case RIGHT:
+                    this.controller.SetTrigger("Right");
+                    break;
+            }
             this.dashTimer.Reset();
 		}
 
@@ -73,7 +85,7 @@ public class Dodging : MonoBehaviour  {
 	private void FixedUpdate() {
 		switch (state) {
 			case MovementState.Dashing:
-                Dash(Time.fixedDeltaTime);
+				Dash(Time.fixedDeltaTime);
                 break;
 			case MovementState.Walking:
 				return;

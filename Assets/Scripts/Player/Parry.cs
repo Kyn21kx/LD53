@@ -29,6 +29,7 @@ public class Parry : MonoBehaviour {
 	private ParticleSystem explosionEffect;
 	public GameObject parryIndicatorPrefab;
 	private MusicManager musicManager;
+	private Animator controller;
 
 	//So, we press a button, and start the timer, then stop it when we get hit
 	private SpartanTimer parryTimerInterval;
@@ -45,6 +46,7 @@ public class Parry : MonoBehaviour {
 	private float fresnel;
 
 	private void Start() {
+		this.controller = GetComponent<Animator>();
 		this.CurrParryState = ParryResult.NONE;
 		this.material = this.meshRenderer.material;
 		this.meshRenderer.gameObject.SetActive(false);
@@ -124,6 +126,9 @@ public class Parry : MonoBehaviour {
 
 	public void SendParryResult(ParryResult result) {
 		//We have a result, damage the player, add combo multipliers, show it to the screen and stuff
+		if (result != ParryResult.MISSED && result != ParryResult.NONE) {
+			this.controller.SetTrigger("Parry");
+		}
 		this.CurrParryState = result;
 	}
 

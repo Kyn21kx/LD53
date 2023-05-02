@@ -57,7 +57,7 @@ public class Score : MonoBehaviour {
 		get => this.packets;
 		set {
 			if (value <= 0) {
-				EntityFetcher.s_GameManager.EndGame();
+				EntityFetcher.s_GameManager.EndGame(true);
 			}
 			this.packets = value;
 			this.packetsText.text = $"{value}";
@@ -123,8 +123,10 @@ public class Score : MonoBehaviour {
 	}
 
 	public void DropPacket() {
+		if (this.packetRotateRef.Count < 1) return;
 		this.Packets--;
 		PacketRotate toDestroy = this.packetRotateRef.Pop();
+		if (toDestroy == null) return;
 		Destroy(toDestroy.gameObject);
 		//Move them along?
 	}
