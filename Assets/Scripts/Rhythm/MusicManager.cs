@@ -112,4 +112,8 @@ public class MusicManager : MonoBehaviour {
 		return e;
 	}
 
+	private void OnDestroy() {
+		this.pdInstance.Dispose();
+	}
+
 }

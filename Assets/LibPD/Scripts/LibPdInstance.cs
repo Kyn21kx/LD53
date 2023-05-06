@@ -641,39 +641,7 @@ public class LibPdInstance : MonoBehaviour
 	/// Close the patch file on quit.
 	void OnApplicationQuit()
 	{
-		//Remove from our list of active instances before we do anything else.
-		activeInstances.Remove(this);
-
-		if(!pdFail && !patchFail)
-		{
-			libpd_set_instance(instance);
-
-			libpd_start_message(1);
-			libpd_add_float(0.0f);
-			libpd_finish_message("pd", "dsp");
-
-			//TODO: Is this correct? What happens if one LibPdInstance is
-			//destroyed while another stays alive?
-			if(printHook != null)
-			{
-				printHook = null;
-				libpd_set_queued_printhook(printHook);
-			}
-
-			foreach(var ptr in bindings.Values)
-				libpd_unbind(ptr);
-			bindings.Clear();
-
-			libpd_closefile(patchPointer);
-		}
-
-		//If we're the last instance left, release libpd's ringbuffer.
-		if(pdInitialised && (activeInstances.Count < 1))
-		{
-			libpd_queued_release();
-
-			pdInitialised = true;
-		}
+		this.Dispose();
 	}
 	
 	//--------------------------------------------------------------------------
@@ -773,6 +741,41 @@ public class LibPdInstance : MonoBehaviour
 		libpd_set_instance(instance);
 		libpd_unbind(bindings[symbol]);
 		bindings.Remove(symbol);
+	}
+
+	public void Dispose() {
+		if (!pdInitialised) return;
+		//Remove from our list of active instances before we do anything else.
+		activeInstances.Remove(this);
+
+		if (!pdFail && !patchFail) {
+			libpd_set_instance(instance);
+
+			libpd_start_message(1);
+			libpd_add_float(0.0f);
+			libpd_finish_message("pd", "dsp");
+
+			//TODO: Is this correct? What happens if one LibPdInstance is
+			//destroyed while another stays alive?
+			if (printHook != null) {
+				printHook = null;
+				libpd_set_queued_printhook(printHook);
+			}
+
+			foreach (var ptr in bindings.Values)
+				libpd_unbind(ptr);
+			bindings.Clear();
+
+			libpd_closefile(patchPointer);
+		}
+
+		//If we're the last instance left, release libpd's ringbuffer.
+		if (pdInitialised && (activeInstances.Count < 1)) {
+			libpd_queued_release();
+
+			pdInitialised = true;
+		}
+		pdInitialised = false;
 	}
 
 	//--------------------------------------------------------------------------

@@ -10,8 +10,9 @@ public class GameManager : MonoBehaviour {
 	//OH, GOD D:
 	private const float AVERAGE_DELTA_TIME = 0.102093f;
 	
-	public int DistanceCovered => (int)(Time.time * travelSpeed);
+	public int DistanceCovered => (int)(gameTime * travelSpeed);
 	public float travelSpeed = 6f;
+	private float gameTime;
 
 	public bool Paused { get; private set; }
 	public bool GameOver { get; private set; }
@@ -31,7 +32,14 @@ public class GameManager : MonoBehaviour {
 	private PostProcessVolume postProcessVolume;
 	public float maxDistance;
 
+	private void Awake() {
+		if (EntityFetcher.s_GameManager == null) {
+			EntityFetcher.s_Instance.Initialize();
+		}
+	}
+
 	private void Start() {
+		this.gameTime = 0f;
 		this.Paused = false;
 		this.GameOver = false;
 		this.pauseMenu.SetActive(this.Paused);
@@ -43,15 +51,18 @@ public class GameManager : MonoBehaviour {
 		float distanceToCover = EntityFetcher.s_TerrainSplit.ScaleToWorld.z;
 		this.travelSpeed = (distanceToCover / musicManager.TimeToOneMeasure) / AVERAGE_DELTA_TIME;
 		this.maxDistance = Random.Range(distanceToCover * 100f, distanceToCover * 200f);
+		this.distanceImg.fillAmount = 0f;
 		//this.maxDistance = 300;
 	}
 
 	private void Update() {
+		this.gameTime += Time.deltaTime;
 		this.gameOverMenu.SetActive(this.GameOver);
 		if (this.GameOver) return;
 		this.HandleInput();
 		this.distanceImg.fillAmount = Mathf.Clamp01(this.DistanceCovered / this.maxDistance);
-		if (SpartanMath.ArrivedAt(this.distanceImg.fillAmount, 1f, 0.1f)) {
+		if (SpartanMath.ArrivedAt(this.distanceImg.fillAmount, 1f, 0.05f)) {
+			this.distanceImg.fillAmount = 1f;
 			this.EndGame(false);
 		}
 	}
@@ -101,7 +112,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void ReloadScene() {
-		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+		SceneManager.LoadScene(0, LoadSceneMode.Single);
 	}
 
 }
