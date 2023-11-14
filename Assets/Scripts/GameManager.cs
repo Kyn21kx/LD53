@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour {
 	private const float AVERAGE_DELTA_TIME = 0.102093f;
 	
 	public int DistanceCovered => (int)(gameTime * travelSpeed);
+	public float GameTime => gameTime;
 	public float travelSpeed = 6f;
 	private float gameTime;
 

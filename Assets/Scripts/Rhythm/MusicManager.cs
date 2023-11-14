@@ -27,12 +27,14 @@ public class MusicManager : MonoBehaviour {
 	};
 	const int MEASURE_VALUE = 4;
 	const float SECONDS_IN_MINUTE = 60f;
+	const float INVULNERABILITY_START_SECONDS = 2f;
 
 	[SerializeField]
 	private float bpm;
 	[SerializeField, Range(0f, 200f)]
 	private float windowSize;
 	public float TimeToOneMeasure => MEASURE_VALUE * (this.bpm / SECONDS_IN_MINUTE);
+	private GameManager GameManagerRef => EntityFetcher.s_GameManager;
     private LibPdInstance pdInstance;
 	private TerrainSplit obstacleGenerator;
 	private Parry parryRef;
@@ -91,6 +93,7 @@ public class MusicManager : MonoBehaviour {
 	}
 
 	private void AddToBuffer(int value) {
+		if (GameManagerRef.Paused || GameManagerRef.GameTime < INVULNERABILITY_START_SECONDS) return;
 		this.spawnBuffer.Add(value);
 		//If we hit 4, spawn the obstacles, and clear the buffer
 		if (this.spawnBuffer.Count >= TerrainSplit.LANE_COUNT) {

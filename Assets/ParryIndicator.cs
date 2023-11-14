@@ -31,13 +31,15 @@ public class ParryIndicator : MonoBehaviour {
 
 		this.targetColor = initialColor;
 		this.textRef.color = initialColor;
+		this.rectTransform.position = new Vector3(this.rectTransform.position.x, this.rectTransform.position.y + 50f);
+		this.transform.position = new Vector3(this.rectTransform.position.x + 200f, this.rectTransform.position.y + 50f);
 		this.t = 0f;
 	}
 
 
 
 	private void Update() {
-		this.t += Time.deltaTime * 0.25f;
+		this.t += Time.deltaTime * 0.15f;
 		Vector3 position = this.rectTransform.position;
 		position.y -= t * 0.25f;
 		this.rectTransform.position = position;

@@ -8,6 +8,12 @@ public enum MovementState {
     Walking
 }
 
+enum Direction
+{
+    Left = -1,
+    Right = 1
+}
+
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Animator))]
 public class Dodging : MonoBehaviour  {
@@ -26,9 +32,12 @@ public class Dodging : MonoBehaviour  {
     private TerrainSplit terrainInfo;
 
     private float DashDuration => this.terrainInfo.CenterSpace / this.moveSpeed;
-    
-    private bool Grounded => System.MathF.Round(this.rig.transform.position.y, 2) == 0f;
 
+#if UNITY_STANDALONE_WIN
+    private bool Grounded => System.MathF.Round(this.rig.transform.position.y, 2) == 0f;
+#elif UNITY_STANDALONE_OSX
+    private bool Grounded => System.Math.Round(this.rig.transform.position.y, 2) == 0f;
+#endif
     private int dashDirection = 0;
     private Rigidbody rig;
     private Animator controller;
@@ -66,20 +75,21 @@ public class Dodging : MonoBehaviour  {
 
     private void Update() {
         this.HandleInput();
-        if (this.AbleToDash()) {
-            this.state = MovementState.Dashing;
-            switch (this.dashDirection) {
-                case LEFT:
-                    this.controller.SetTrigger("Left");
-                    break;
 
-                case RIGHT:
-                    this.controller.SetTrigger("Right");
-                    break;
-            }
-            this.dashTimer.Reset();
-		}
+        if (!this.AbleToDash()) return;
 
+        this.state = MovementState.Dashing;
+        switch (this.dashDirection)
+        {
+            case LEFT:
+                this.controller.SetTrigger("Left");
+                break;
+
+            case RIGHT:
+                this.controller.SetTrigger("Right");
+                break;
+        }
+        this.dashTimer.Reset();
     }
 
 	private void FixedUpdate() {
@@ -108,8 +118,6 @@ public class Dodging : MonoBehaviour  {
 
     private void Dash(float timeStep)  {
         float currTime = this.dashTimer.GetCurrentTime(TimeScaleMode.Seconds);
-        System.Console.WriteLine($"Current dashing time: {currTime}");
-
         Vector3 targetPos = this.PlacePlayer(LaneIndex, timeStep * this.moveSpeed);
         if (currTime >= this.DashDuration || SpartanMath.ArrivedAt(this.rig.position, targetPos)) {
             this.dashTimer.Stop();
@@ -139,6 +147,7 @@ public class Dodging : MonoBehaviour  {
         targetPos.z += this.transform.localScale.z + DEPTH_TOLERANCE;
         if (isInstant) {
             this.rig.position = targetPos;
+            return targetPos;
         }
         this.rig.position = Vector3.Lerp(this.rig.position, targetPos, speed);
         return targetPos;
